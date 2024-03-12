@@ -73,3 +73,35 @@ def unlike_post_db(post_id):
         return "Лайк снят"
     else:
         return 'Пост не найден'
+
+
+# Загрузить фото к определённому посту
+def upload_post_photo_db(post_id, photo_path):
+    db = next(get_db())
+    new_photo = PostPhoto(post_id=post_id, photo_path=photo_path)
+    if new_photo:
+        db.add(new_photo)
+        db.commit()
+        return "Фото добавлено."
+    else:
+        return "Пост не найден"
+
+
+# Удаление фотографии определённого поста
+def detele_post_photo_db(post_id, photo_path):
+    db = next(get_db())
+    new_photo = PostPhoto(post_id=post_id, photo_path=photo_path)
+    if new_photo:
+        db.delete(new_photo.photo_path)
+        db.commit()
+        return "Фото удалено."
+    else:
+        return "Пост не найден"
+
+
+# Запрос на получение всех фотографий
+def all_photos_db():
+    db = next(get_db())
+    photos = db.query(PostPhoto).all()
+    return  photos
+
