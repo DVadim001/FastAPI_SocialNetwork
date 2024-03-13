@@ -51,4 +51,3 @@ class PostComments(Base):
 
     user_fk = relationship(User, lazy='subquery')
     post_fk = relationship(UserPost, lazy='subquery')
-

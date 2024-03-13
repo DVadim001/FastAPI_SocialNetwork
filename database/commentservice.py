@@ -3,7 +3,7 @@ from datetime import datetime
 from database import get_db
 
 
-#Опубликовать комментарий
+# Опубликовать комментарий
 def add_comment_db(post_id, comment_text, user_id):
     db = next(get_db())
     new_comment = PostComments(post_id=post_id, comment_text=comment_text, user_id=user_id, publish_date=datetime.now())
@@ -43,7 +43,7 @@ def change_comment_db(post_id, comment_id, change_text):
 # Получить все комменты определённого поста
 def get_post_comment(post_id):
     db = next(get_db())
-    post_comment =db.query(PostComments).filter_by(post_id=post_id).all()
+    post_comment = db.query(PostComments).filter_by(post_id=post_id).all()
     if post_comment:
         return post_comment
     else:
