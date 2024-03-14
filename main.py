@@ -1,2 +1,4 @@
 from fastapi import FastAPI
-app = FastAPI(docs_url='/')
+app = FastAPI(
+    title="Social Network",
+    docs_url='/')
