@@ -19,21 +19,26 @@ def get_exact_user_db(user_id):
         return 'Такого пользователя нет'
 
 
-# регистрация пользователя
-def register_user_db(name, surname, phone_number, city, birthday, password):
+# Регистрация пользователя
+def register_user_db(name, surname, phone_number, email, city, birthday, password):
     db = next(get_db())
     checker = db.query(User).filter_by(phone_number=phone_number)
     if checker:
         return checker.user_id
     else:
-        new_user = User(name=name, surname=surname, phone_number=phone_number,
-                        city=city, birthday=birthday, password=password)
+        new_user = User(name=name,
+                        surname=surname,
+                        phone_number=phone_number,
+                        email=email,
+                        city=city,
+                        birthday=birthday,
+                        password=password)
         db.add(new_user)
         db.commit()
         return new_user.id
 
 
-# Удаление пользователя
+# Логин пользователя
 def login_user_db(phone_number, password):
     db = next(get_db())
     login = db.query(User).filter_by(phone_number=phone_number, password=password).first()
@@ -43,7 +48,7 @@ def login_user_db(phone_number, password):
         return 'Неверный номер телефона или пароль'
 
 
-# Логин пользователя
+# Удаление пользователя
 def delete_user_db(user_id):
     db = next(get_db())
     user = db.query(User).filter_by(user_id=user_id).first()
@@ -55,7 +60,7 @@ def delete_user_db(user_id):
         return 'Пользователь не найден'
 
 
-# Изменение данныз пользоватетя
+# Изменение данных пользователя
 def edit_user_info_db(user_id, edit_info, new_info):
     db = next(get_db())
     exec_user = get_exact_user_db(user_id)
@@ -84,7 +89,7 @@ def upload_profile_photo_db(user_id, photo_path):
         return "Пользователь не найден."
 
 
-# Удаление фото профиля и начинаем posrservice
+# Удаление фото профиля
 def delete_profile_photo_db(user_id):
     db = next(get_db())
     exec_user = get_exact_user_db(user_id)

@@ -2,6 +2,7 @@ from database.models import PostPhoto, UserPost
 from database import get_db
 from datetime import datetime
 
+
 # Получить все публикации
 def get_all_posts_db():
     db = next(get_db())
@@ -9,7 +10,7 @@ def get_all_posts_db():
     return all_posts
 
 
-# Получить оптеделённую публикацию
+# Получить определённую публикацию
 def get_exact_post_db(post_id):
     db = next(get_db())
     exact_post = db.query(UserPost).filter_by(post_id=post_id).first()
@@ -63,6 +64,7 @@ def like_post_db(post_id):
     else:
         return 'Пост не найден'
 
+
 # Удалить лайк из публикации
 def unlike_post_db(post_id):
     db = next(get_db())
@@ -88,7 +90,7 @@ def upload_post_photo_db(post_id, photo_path):
 
 
 # Удаление фотографии определённого поста
-def detele_post_photo_db(post_id, photo_path):
+def delete_post_photo_db(post_id, photo_path):
     db = next(get_db())
     new_photo = PostPhoto(post_id=post_id, photo_path=photo_path)
     if new_photo:
@@ -103,5 +105,4 @@ def detele_post_photo_db(post_id, photo_path):
 def all_photos_db():
     db = next(get_db())
     photos = db.query(PostPhoto).all()
-    return  photos
-
+    return photos
