@@ -1,4 +1,5 @@
-from database.models import PostComments
+from database.models import PostComment
+
 from datetime import datetime
 from database import get_db
 
@@ -6,45 +7,48 @@ from database import get_db
 # Опубликовать комментарий
 def add_comment_db(post_id, comment_text, user_id):
     db = next(get_db())
-    new_comment = PostComments(post_id=post_id, comment_text=comment_text, user_id=user_id, publish_date=datetime.now())
+
+    new_comment = PostComment(post_id=post_id,
+                              comment_text=comment_text, user_id=user_id,
+                              publish_date=datetime.now())
     if new_comment:
         db.add(new_comment)
         db.commit()
-        return "Комментарий успешно добавлен."
+
+        return 'Комментарий успешно добавлен'
     else:
-        return "Запрашиваемого поста нет."
+        return 'Нету такого поста (('
 
 
-# Удаление комментариев
+# Удаления комментарий
 def delete_comment_db(post_id, comment_id):
     db = next(get_db())
-    exac_comment = db.query(PostComments).filter_by(post_id=post_id, comment_id=comment_id).first()
-    if exac_comment:
-        db.delete(exac_comment)
-        db.commit()
-        return "Успешно удалён"
-    else:
-        return "Запрашиваемого комментария нет"
+    # Если ошибка то Капзда Шоху
+    exact_comment = db.query(PostComment).filter_by(post_id=post_id, comment_id=comment_id).first()
 
-
-# Изменить определённый комментарий
-def change_comment_db(post_id, comment_id, change_text):
-    db = next(get_db())
-    exact_comment = db.query(PostComments).filter_by(post_id=post_id, comment_id=comment_id).first()
     if exact_comment:
-        if comment_id == 'text_comment':
-            exact_comment.name = change_text
+        db.delete(exact_comment)
         db.commit()
-        return 'Комментарий успешно изменён'
+
+        return 'Успешно удален'
     else:
-        return "Комментарий не найден."
+        return 'Такого коммента нету'
 
 
-# Получить все комменты определённого поста
-def get_post_comment(post_id):
+# Изменить определенную комментарию
+def change_comment_db(post_id, comment_id, change_text):
+    pass
+
+
+# Вам 15 минут попробуйте сделать!
+
+# Получить все комменты определенного поста
+def get_post_comments_db(post_id):
     db = next(get_db())
-    post_comment = db.query(PostComments).filter_by(post_id=post_id).all()
-    if post_comment:
-        return post_comment
+
+    post_comments = db.query(PostComment).filter_by(post_id=post_id).all()
+
+    if post_comments:
+        return post_comments
     else:
-        return "Комментарии не найдены"
+        return 'Нету брат извините(('

@@ -1,54 +1,55 @@
 from database.models import User
+
 from database import get_db
 
 
 # Получить всех пользователей
+from database.security import create_access_token
+
+
 def get_all_users_db():
     db = next(get_db())
-    all_users = db.query(User).all()
-    return all_users
+    get_all_users = db.query(User).all()
+    return get_all_users
 
 
-# Получить определённого пользователя
+# Получить определенного пользователя
 def get_exact_user_db(user_id):
     db = next(get_db())
-    exact_user = db.query(User).filter_by(user_id=user_id).first()
-    if exact_user:
-        return exact_user.user_id
+    checker = db.query(User).filter_by(user_id=user_id).first()
+    if checker:
+        return f'Пользователь найден {checker.user_id}'
     else:
-        return 'Такого пользователя нет'
+        return 'Пользователь не обнаружен'
 
 
 # Регистрация пользователя
-def register_user_db(name, surname, phone_number, email, city, birthday, password):
+def register_user_db(username, surname, phone_number, city, password):
     db = next(get_db())
-    checker = db.query(User).filter_by(phone_number=phone_number)
+    checker = db.query(User).filter_by(phone_number=phone_number).first()
     if checker:
-        return checker.user_id
+        return 'Такой номер телефона уже есть в базу'
     else:
-        new_user = User(name=name,
-                        surname=surname,
-                        phone_number=phone_number,
-                        email=email,
-                        city=city,
-                        birthday=birthday,
-                        password=password)
+        new_user = User(username=username, surname=surname, phone_number=phone_number, city=city, password=password)
         db.add(new_user)
         db.commit()
-        return new_user.id
+        return f'Успешно зарегистрированы {new_user.user_id}'
 
 
-# Логин пользователя
-def login_user_db(phone_number, password):
+# Логин
+def login_user_db(username, password):
     db = next(get_db())
-    login = db.query(User).filter_by(phone_number=phone_number, password=password).first()
+    # user
+    login = db.query(User).filter_by(username=username, password=password).first()
     if login:
-        return f'Вход выполнен успешно для пользователя {login.user_id}'
+        token_data = {"user_id": login.user_id}
+        access_token_data = create_access_token(token_data)
+        return {"access_token": access_token_data, "token_type": "Bearer", "status": "Success"}
     else:
         return 'Неверный номер телефона или пароль'
 
 
-# Удаление пользователя
+#  Удаления пользователя
 def delete_user_db(user_id):
     db = next(get_db())
     user = db.query(User).filter_by(user_id=user_id).first()
@@ -60,42 +61,50 @@ def delete_user_db(user_id):
         return 'Пользователь не найден'
 
 
-# Изменение данных пользователя
+# Изменения данных пользователя
 def edit_user_info_db(user_id, edit_info, new_info):
     db = next(get_db())
-    exec_user = get_exact_user_db(user_id)
-    if exec_user:
-        if edit_info == 'name':
-            exec_user.name = new_info
+
+    exact_user = db.query(User).filter_by(user_id=user_id).first()  # 3
+
+    if exact_user:
+        if edit_info == 'username':
+            exact_user.username = new_info
         elif edit_info == 'surname':
-            exec_user.surname = new_info
+            exact_user.surname = new_info
 
         db.commit()
-        return 'Данные Успешно изменены!'
+        return 'Данные успешно изменены!'
     else:
-        return "Пользователь не найден."
+        return 'Пользователь не найден(('
 
 
+# Мы будем делать
 # Добавить фото профиля
 def upload_profile_photo_db(user_id, photo_path):
     db = next(get_db())
 
-    exec_user = get_exact_user_db(user_id)
-    if exec_user:
-        exec_user.profile_photo = photo_path
+    exact_user = get_exact_user_db(user_id)
+
+    if exact_user:
+        exact_user.profile_photo = photo_path
         db.commit()
-        return "Успешно"
+
+        return 'Успешно!'
     else:
-        return "Пользователь не найден."
+        return 'Пользователь не найден(('
 
 
-# Удаление фото профиля
+# Удаления фото профиля и начнем postservice.py
 def delete_profile_photo_db(user_id):
     db = next(get_db())
-    exec_user = get_exact_user_db(user_id)
-    if exec_user:
-        exec_user.profile_photo = 'None'
+
+    exact_user = get_exact_user_db(user_id)
+
+    if exact_user:
+        exact_user.profile_photo = 'None'
         db.commit()
-        return "Фото профиля удалено"
+
+        return 'Фото профиля удален'
     else:
-        return "Пользователь не найден."
+        return 'Пользователь не найден(('
