@@ -4,9 +4,9 @@ from sqlalchemy.orm import sessionmaker
 
 # Путь к БД
 SQLALCHEMY_DATABASE_URI = 'sqlite:///social.db'
-# Создаем наш движок
+# Создаем движок
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
-# Соединения
+# Соединение
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 

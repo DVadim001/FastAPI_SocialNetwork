@@ -74,12 +74,11 @@ def edit_user_info_db(user_id, edit_info, new_info):
             exact_user.surname = new_info
 
         db.commit()
-        return 'Данные успешно изменены!'
+        return 'Данные успешно изменены.'
     else:
-        return 'Пользователь не найден(('
+        return 'Пользователь не найден.'
 
 
-# Мы будем делать
 # Добавить фото профиля
 def upload_profile_photo_db(user_id, photo_path):
     db = next(get_db())

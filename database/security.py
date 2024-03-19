@@ -1,8 +1,7 @@
-# security.py
 import jwt
 from datetime import datetime, timedelta
 
-SECRET_KEY = 'Sardorbek-uaef98bg9824b9834g98'
+SECRET_KEY = 'wjehfowuMKMKQAM:L@!*0jlmklkl'
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTE = 30
 

@@ -1,15 +1,14 @@
-# from pydantic import BaseModel
-#
-#
-#
-# class QWA(BaseModel):
-#     name: str
-#     surname: str
-#     phone_number: str
-#     city: str
-#     password: str
-#
-#
-# class QWAS(BaseModel):
-#     phone_number: str
-#     password: str
+from datetime import datetime
+from pydantic import BaseModel
+
+
+# Валидатор для публикации поста
+class PublicPostValidator(BaseModel):
+    user_id: int
+    post_text: str
+
+
+# Валидатор для изменения данных в посте
+class EditPostValidator(BaseModel):
+    post_id: int
+    new_text: str
