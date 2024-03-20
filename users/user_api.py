@@ -10,7 +10,7 @@ from database.userservice import (register_user_db,
                                   delete_user_db,
                                   delete_profile_photo_db)
 
-# Создать компонент
+# Создаём компонент
 user_router = APIRouter(prefix='/users', tags=['Управления с пользователями'])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
@@ -37,7 +37,7 @@ async def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
         return user
 
 
-# Запрос на получегтя всех пользователей
+# Запрос на получение всех пользователей
 @user_router.get('/all-user')
 async def get_all_users():
     return get_all_users_db()
@@ -63,3 +63,6 @@ async def edit_user_db(data: EditUserValidator):
 async def delete_user(user_id):
     user = delete_user_db(user_id)
     return user
+
+
+# Удаления фото профиля

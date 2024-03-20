@@ -17,7 +17,7 @@ def get_exact_post_db(post_id):
     if exact_post:
         return exact_post
     else:
-        return 'Данный пост не найден'
+        return 'Пост не найден'
 
 
 # Добавить публикацию
@@ -36,9 +36,9 @@ def edit_post_text_db(post_id, new_text):
     if exact_post:
         exact_post.post_text = new_text
         db.commit()
-        return 'Текст к публикации изменен!'
+        return 'Текст к публикации изменен.'
     else:
-        return 'Пост не найден Брат(('
+        return 'Пост не найден'
 
 
 # Удалить публикацию
@@ -48,31 +48,33 @@ def delete_post_db(post_id):
     if exact_post:
         db.delete(exact_post)
         db.commit()
-        return 'Post successfully deleted'
+        return 'Пост успешно удалён'
     else:
-        return 'Post not found'
+        return 'Пост не найден'
 
 
+# Добавить лайк к определённому посту
 def add_like_post_db(post_id):
     db = next(get_db())
     exact_post = db.query(UserPost).filter_by(post_id=post_id).first()
     if exact_post:
         exact_post.likes += 1
         db.commit()
-        return '+1 Like'
+        return 'Лайк добавлен'
     else:
-        return 'Post not found'
+        return 'Пост не найден'
 
 
+# Снять лайк с определённого поста
 def unlike_post_db(post_id):
     db = next(get_db())
     exact_post = db.query(UserPost).filter_by(post_id=post_id).first()
     if exact_post:
         exact_post.likes -= 1
         db.commit()
-        return '-1 Like'
+        return 'Лайк снят'
     else:
-        return 'Post not found'
+        return 'Пост не найден'
 
 
 # Загрузить фотографии к определенному посту
@@ -82,9 +84,9 @@ def upload_post_photo_db(post_id, photo_path):
     if new_photo:
         db.add(new_photo)
         db.commit()
-        return 'Фото добавлен!'
+        return 'Фото добавлено'
     else:
-        return 'Нету поста Брат('
+        return 'Пост не найден'
 
 
 # Удалить фотографию определенного поста
@@ -94,14 +96,13 @@ def delete_post_photo_db(post_id):
     if new_photo:
         new_photo.photo_path = None
         db.commit()
-        return 'Фото удалено.'
+        return 'Фото удалено'
     else:
-        return 'Такого поста нет'
+        return 'Пост не найден'
 
 
 # Запрос на получении всех фотографий
 def all_photos_db():
     db = next(get_db())
-
     photos = db.query(PostPhoto).all()
     return photos

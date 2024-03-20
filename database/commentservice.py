@@ -15,7 +15,7 @@ def add_comment_db(post_id, comment_text, user_id):
         db.commit()
         return 'Комментарий успешно добавлен'
     else:
-        return 'Нету такого поста (('
+        return 'Такого комментария нет'
 
 
 # Удаления комментарий
@@ -25,14 +25,21 @@ def delete_comment_db(post_id, comment_id):
     if exact_comment:
         db.delete(exact_comment)
         db.commit()
-        return 'Успешно удален'
+        return 'Комментарий успешно удален'
     else:
-        return 'Такого коммента нету'
+        return 'Такого комментария нет'
 
 
-# Изменить определенную комментарию
+# Изменить определенный комментарий
 def change_comment_db(post_id, comment_id, change_text):
-    pass
+    db = next(get_db())
+    exact_comment = db.query(PostComment).filter_by(post_id=post_id, comment_id=comment_id).first()
+    if exact_comment:
+        exact_comment.comment_text = change_text
+        db.commit()
+        return "Комментарий изменён"
+    else:
+        return "Такого комментария нет"
 
 
 # Получить все комменты определенного поста
@@ -42,4 +49,4 @@ def get_post_comments_db(post_id):
     if post_comments:
         return post_comments
     else:
-        return 'Отсутствует'
+        return 'Комментарий отсутствует'

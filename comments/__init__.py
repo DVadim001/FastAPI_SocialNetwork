@@ -1,15 +1,13 @@
-# from pydantic import BaseModel
-#
-#
-#
-# class QQ(BaseModel):
-#     name: str
-#     surname: str
-#     phone_number: str
-#     city: str
-#     password: str
-#
-#
-# class QW(BaseModel):
-#     phone_number: str
-#     password: str
+from pydantic import BaseModel
+
+
+class PublicPostValidator(BaseModel):
+    post_id: int
+    comment_text: str
+    user_id: int
+
+
+class EditPostValidator(BaseModel):
+    post_id: int
+    comment_id: int
+    change_text: str

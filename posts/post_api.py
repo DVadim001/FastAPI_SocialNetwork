@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, Body
+from fastapi import APIRouter, UploadFile
 from database.postservice import (get_all_posts_db,
                                   get_exact_post_db,
                                   add_new_post_db,
@@ -14,7 +14,7 @@ from posts import PublicPostValidator, EditPostValidator
 post_router = APIRouter(prefix='/posts', tags=['Работа с публикациями'])
 
 
-# Загружаем наши посты DOWNLOAD
+# Загружаем наши посты
 @post_router.post('public_post')
 async def publish_post(data: PublicPostValidator):
     result = add_new_post_db(**data.model_dump())
@@ -106,6 +106,3 @@ async def unlike(post_id):
 @post_router.delete('/delete-photo')
 async def delete_photo(post_id):
     return delete_post_photo_db(post_id)
-
-
-# Получение всех лайков

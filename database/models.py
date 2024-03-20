@@ -25,7 +25,6 @@ class UserPost(Base):
     post_text = Column(Text)
     likes = Column(Integer, default=0)
     publish_date = Column(DateTime)
-
     user_fk = relationship(User, lazy='subquery')
 
 
