@@ -32,9 +32,9 @@ class UserPost(Base):
 class PostPhoto(Base):
     __tablename__ = 'post_photos'
     photo_id = Column(Integer, primary_key=True, autoincrement=True)
-    post_id = Column(Integer, ForeignKey('user_posts.post_id'))  # 3
+    post_id = Column(Integer, ForeignKey('user_posts.post_id'))
     photo_path = Column(String)
-    post_fk = relationship(UserPost, lazy='subquery')  # 3.all()
+    post_fk = relationship(UserPost, lazy='subquery')
 
 
 # Таблица комментарий
