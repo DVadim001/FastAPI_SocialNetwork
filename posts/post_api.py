@@ -15,7 +15,7 @@ post_router = APIRouter(prefix='/posts', tags=['Работа с публикац
 
 
 # Загружаем наши посты
-@post_router.post('public_post')
+@post_router.post('/public_post')
 async def publish_post(data: PublicPostValidator):
     result = add_new_post_db(**data.model_dump())
     if result:
