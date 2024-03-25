@@ -3,6 +3,19 @@ from database import get_db
 from database.security import create_access_token
 
 
+# Регистрация пользователя
+def register_user_db(username, surname, phone_number, city, password):
+    db = next(get_db())
+    checker = db.query(User).filter_by(phone_number=phone_number).first()
+    if checker:
+        return 'Данный номер телефона уже есть в базе'
+    else:
+        new_user = User(username=username, surname=surname, phone_number=phone_number, city=city, password=password)
+        db.add(new_user)
+        db.commit()
+        return f'Успешно зарегистрирован: {new_user.user_id}'
+
+
 # Получить всех пользователей
 def get_all_users_db():
     db = next(get_db())
@@ -20,23 +33,9 @@ def get_exact_user_db(user_id):
         return 'Пользователь не обнаружен'
 
 
-# Регистрация пользователя
-def register_user_db(username, surname, phone_number, city, password):
-    db = next(get_db())
-    checker = db.query(User).filter_by(phone_number=phone_number).first()
-    if checker:
-        return 'Данный номер телефона уже есть в базе'
-    else:
-        new_user = User(username=username, surname=surname, phone_number=phone_number, city=city, password=password)
-        db.add(new_user)
-        db.commit()
-        return f'Успешно зарегистрирован: {new_user.user_id}'
-
-
 # Логин
 def login_user_db(username, password):
     db = next(get_db())
-    # user
     login = db.query(User).filter_by(username=username, password=password).first()
     if login:
         token_data = {"user_id": login.user_id}
@@ -46,22 +45,10 @@ def login_user_db(username, password):
         return 'Неверный номер телефона или пароль'
 
 
-#  Удаления пользователя
-def delete_user_db(user_id):
-    db = next(get_db())
-    user = db.query(User).filter_by(user_id=user_id).first()
-    if user:
-        db.delete(user)
-        db.commit()
-        return f'Пользователь с ID {user_id} удален'
-    else:
-        return 'Пользователь не найден'
-
-
 # Изменения данных пользователя
 def edit_user_info_db(user_id, edit_info, new_info):
     db = next(get_db())
-    exact_user = db.query(User).filter_by(user_id=user_id).first()  # 3
+    exact_user = db.query(User).filter_by(user_id=user_id).first()
     if exact_user:
         if edit_info == 'username':
             exact_user.username = new_info
@@ -93,5 +80,17 @@ def delete_profile_photo_db(user_id):
         exact_user.profile_photo = 'None'
         db.commit()
         return 'Фото профиля удалено'
+    else:
+        return 'Пользователь не найден'
+
+
+#  Удаления пользователя
+def delete_user_db(user_id):
+    db = next(get_db())
+    user = db.query(User).filter_by(user_id=user_id).first()
+    if user:
+        db.delete(user)
+        db.commit()
+        return f'Пользователь с ID {user_id} удален'
     else:
         return 'Пользователь не найден'
