@@ -11,7 +11,7 @@ from database.userservice import (register_user_db,
                                   delete_profile_photo_db)
 
 # Создаём компонент
-user_router = APIRouter(prefix='/users', tags=['Управления с пользователями'])
+user_router = APIRouter(prefix='/users', tags=['Управление пользователями'])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
@@ -55,7 +55,6 @@ async def get_user(user_id: int):
 async def edit_user_db(data: EditUserValidator):
     change_data = data.model_dump()
     result = edit_user_info_db(**change_data)
-    print(result)
     return result
 
 
